@@ -2,11 +2,17 @@
 
 GNUの`screen`コマンドは1つの端末上に、仮想端末を使い端末を多重化できる[ターミナルマルチプレクサ](https://en.wikipedia.org/wiki/Terminal_multiplexer)と呼ばれるソフトウェアです。
 
-`screen`コマンドは仮想端末を提供し、ユーザは仮想端末や提供されるWinowを逐次切り替えて操作する事ができます。
+`screen`コマンドは仮想端末を提供し、ユーザは仮想端末や提供されるWindowを逐次切り替えて操作する事ができます。
 
-作業途中で仮想端末を抜けて、後で再接続して処理を継続したり。
-1つの仮想端末で長時間動くようなタスクをバックグラウンドで動かしつつ、別の仮想端末につないで他の処理を継続したり。
-複数のユーザで仮想端末を共有したりできます。
+なので下記のような事が実現できます。
+
+- 作業途中で仮想端末を抜けて、後で再接続して処理を継続したり。
+- 1つの仮想端末で長時間動くようなタスクをバックグラウンドで動かしつつ、別の仮想端末につないで他の処理を継続したり。
+- 仮想端末上で処理を実行しておいて、一旦ユーザログオフしたとしても仮想端末上で処理は継続され、後でユーザログインして仮想端末に接続すれば処理を継続できたり。
+- sshで端末接続した際に、仮想端末上で処理しておけばssh接続が切れてしまっても、再接続すれば処理を継続できたり。
+- 複数のユーザで仮想端末を共有したり。
+
+etcetc......
 
 本資料はそんな`screen`コマンドの基本的な使い方となります。
 
@@ -52,7 +58,7 @@ screen
 
 ![screen](image/screen.png)
 
-`screen`コマンドを実行すると、スクリーンセッションを生成し、そこにWindowが作成され、そのWinodwの上でシェルが実行されています。
+`screen`コマンドを実行すると、スクリーンセッションを生成し、そこにWindowが作成され、そのWindowの上でシェルが実行されています。
 
 ### 余談：WSL環境の場合
 
@@ -172,7 +178,7 @@ screen -S hogehoge
 - `screen -d -m -S [sessionname]`
 
 `screen -d -m`でスクリーンセッションを生成しますがアタッチせずにスクリーンセッションを生成します。
-また`-S`オプションを利用して`screen -d -m -S hogehoge`で名前付きでデタッチモードのスクリーンセッションを生成できます。
+また`-S`オプションを利用して`screen -d -m -S hogehoge`で名前付きデタッチモードのスクリーンセッションを生成できます。
 
 スクリーンセッション名を一意になるように名付ければ。
 
@@ -251,14 +257,14 @@ screen -S hogehoge
 - `CTRL+A CTRL+n`
 - `Command:next`
 
-winodw listを表示してそこでwinodw間の移動ができましたが、上記のコマンドでも移動できます。
+Window listを表示してそこでWindow間の移動ができましたが、上記のコマンドでも移動できます。
 
 スクリーンコマンドで実行する場合は
 
 `CTRL+A :`でコマンドラインモードに入り　`next`　で実行。
 もしくは`screen -X next`を実行。
 
-## 前のWinowへ移動
+## 前のWindowへ移動
 
 [Selecting a Window](https://www.gnu.org/software/screen/manual/screen.html#Selecting)
 
@@ -275,15 +281,15 @@ winodw listを表示してそこでwinodw間の移動ができましたが、上
 `CTRL+A :`でコマンドラインモードに入り　`prev`　で実行。
 もしくは`screen -X prev`を実行。
 
-## Winowにタイトルをつける
+## Windowにタイトルをつける
 
 [Naming Windows (Titles)](https://www.gnu.org/software/screen/manual/screen.html#Naming-Windows)
 
 - `CTRL+A A`
 - `Command:title`
 
-Winodwが多くなってくると、どこで何をやっている画面なのか判別しづらくなってしまいます。
-Winowにはタイトルをつける事ができるので、名前をつけることにより識別しやすくなります。
+Windowが多くなってくると、どこで何をやっている画面なのか判別しづらくなってきます。
+そんな場合はWindowにタイトルをつける事ができるので、名前をつけることにより識別しやすくなります。
 
 タイトルは`CTRL+A A`で設定する。
 
@@ -291,10 +297,9 @@ Winowにはタイトルをつける事ができるので、名前をつけるこ
 
 コマンドを入力すると`set window's title to:`と出てくるので、ここで現在のタイトルから変更する事ができます。
 
-windows listでも下記のように変更されている事が確認できます。これでわかりやすい。
+Windows Listでも下記のように変更されている事が確認できます。これでわかりやすい。
 
 ![](image/set-window-title-list.png)
-
 
 スクリーンコマンドで実行する場合は
 
@@ -308,7 +313,7 @@ windows listでも下記のように変更されている事が確認できま�
 - `CTRL+A N`
 - `Command:number`
 
-現在、どのWinodwを開いてるかは、`CTRL+A N`で確認できます。
+現在、どのWindowを開いてるかは、`CTRL+A N`で確認できます。
 
 ![](image/window-number.png)
 
@@ -330,7 +335,7 @@ windows listでも下記のように変更されている事が確認できま�
 ![](image/window-kill.png)
 
 確認メッセージが出てくるので、`y`を入力して閉じる事ができます。
-複数のWindowと開いている場合はWindowが閉じられて、他のWinodwに移動します。
+複数のWindowと開いている場合はWindowが閉じられて、他のWindowに移動します。
 開いているWindowが1つの場合は、スクリーンセッションが閉じらます。
 
 なお`exit`や`CTRL+D`を送信しても同様に現在のWindowを閉じることができます。
@@ -354,8 +359,8 @@ windows listでも下記のように変更されている事が確認できま�
 - `CTRL+A |`
 - `Command:split -v`
 
-先にWinodwの話をしてしまいましたが、スクリーンセッションにはRegionと呼ばれる領域があり。
-Regionを分割して、分割したRegionにWinodwを割り当てることにより画面を分割します。
+先にWindowの話をしてしまいましたが、スクリーンセッションにはRegionと呼ばれる領域があり。
+Regionを分割して、分割したRegionにWindowを割り当てることにより画面を分割します。
 
 [Region](https://www.gnu.org/software/screen/manual/screen.html#Regions)
 
@@ -454,6 +459,31 @@ Regionのリサイズはコマンドから実行します。
 
 ![](image/window-resize-40.png)
 
+## Window Captionについて
+
+[Caption](https://www.gnu.org/software/screen/manual/screen.html#Caption)
+
+- `Command: caption always|splitonly [string]`
+- `Command: caption string [string]`
+
+Regionを分割した際に、Window下部にキャプションが表示されます。
+
+![](image/window-caption.png)
+
+`caption`のデフォルトでは`splitonly`が設定されており画面分割時のみしかキャプションが表示されませんが。
+`always`を指定することにより単一ウィンドウの場合でもcaptionを表示する事ができます。
+
+`CTRL+A :`でコマンドラインモードに入り　`caption always`　で実行。
+もしくは`screen -X caption always`を実行。
+
+![](image/window-caption-single.png)
+
+また[string]の部分に書式を設定する事により表示をカスタマイズする事ができます。
+
+書式については下記に記載があります。
+
+[String Escapes](https://www.gnu.org/software/screen/manual/screen.html#String-Escapes)
+
 ## .screenrcについて
 
 [Customizing](https://www.gnu.org/software/screen/manual/screen.html#Customization)
@@ -461,13 +491,18 @@ Regionのリサイズはコマンドから実行します。
 `.screenrc`を記述することによりデフォルトのscreen設定を変更する事ができます。
 `.screenrc`のデフォルト配置場所としてはuser’s home directory と /usr/local/etc/screenrc.
 
-一例としては`screen`の実行時にスタートアップメッセージが表示されますが、これは.screenrcのstartup_messageで制御されています。
+一例としては`screen`の実行時にスタートアップメッセージが表示されますが、これは`startup_message`で制御されています。
 
 [Startup Message](https://www.gnu.org/software/screen/manual/screen.html#Startup-Message)
 
-.screenrcファイルに`startup_message off`と記載すればスタートアップメッセージが表示されない。
+.screenrcファイルに`startup_message off`と記載すれば、スクリーンセッション起動時に`startup_message off`の状態で起動されてスタートアップメッセージが表示されません。
 
 ![](image/screenrc-startupmsg.png)
+
+また別の例としては、`caption`を.screenrcに記述することによりカスタマイズしたWindow captionを表示して画面をわかりやすいしたりできます。
+`caption`の書式がなかなか難しいですが、下記ブログのように書くこともできるようです。
+
+[GNU screenのcaptionとhardstatusの整理](https://rcmdnk.com/blog/2014/02/18/computer-screen/)
 
 ## 総評
 
